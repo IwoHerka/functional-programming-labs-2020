@@ -38,6 +38,8 @@
 ; In Clojure, the idiomatic way of writing such expressions are via nil punning,
 ; as we shall see below.
 
+(use 'clojure.repl)
+
 ; For example, to condition some statement on emptiness of a collection
 ; we need to pun it for nil. To do that, we can use "seq" function:
 (seq []) ; => nil

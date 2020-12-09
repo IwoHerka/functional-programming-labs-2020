@@ -85,8 +85,10 @@ frame
 (defn methods [class]
   (for [meth (.getMethods class)     ; Iterater over class methods
         :let [name (.getName meth)]  ; Bind a variable name
-        :when (re-find #"Vis" name)] ; Build a seq of matched names
+        :when (re-find #"Visible" name)] ; Build a seq of matched names
     name))
+
+(methods java.awt.Frame)
 ; => ("setVisible" "isVisible")
 
 ; The for macro provides a way to iterate over a collection, performing some
@@ -113,7 +115,7 @@ frame
 
 ; It did, but it's so tiny! Not to worry, because a Frame class also has a
 ; .setSize method you can use:
-(.setSize frame (java.awt.Dimension. 200 200))
+(.setSize frame (java.awt.Dimension. 400 400))
 ; => nil
 
 ; And up pops a blank window for you to draw on. At this point, we'll guide you
@@ -171,8 +173,9 @@ frame
 ; For example, the pattern appears to cut off in the middle—perhaps you'd like
 ; to see more. Re-enter that last expression, but this time try larger limits:
 (doseq [[x y xor] (xors 500 500)]
-  (.setColor gfx (java.awt.Color. x y xor))
+  (.setColor gfx (java.awt.Color. xor xor xor))
   (.fillRect gfx x y 1 1))
+
 ; IllegalArgumentException Color parameter outside of expected range: Green Blue
 ; java.awt.Color.testColorValueRange (Color.java:310)
 
@@ -273,6 +276,7 @@ frame
 
 ; This allows you to try different functions and ranges easily. Try to see what
 ; patterns emerge from the following:
+(draw-values bit-xor 256 256)
 (draw-values bit-and 256 256)
 (draw-values + 256 256)
 (draw-values * 500 500)
@@ -291,3 +295,8 @@ frame
 ; help keep morale and motivation high through even tough stages of a project.
 ; But trial-and-error exploration isn't enough. An intuitive basis in Clojure
 ; is also needed to become highly effective.
+
+(fn [x y] (+ x y))
+#(+ %1 %2) => (+ x y)
+
+(second (reverse [1 2 3]))

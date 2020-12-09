@@ -38,6 +38,7 @@
 
 ; Symbols in Clojure are objects in their own right but are often used to
 ; represent another value:
+
 (def foo 22/7)
 ; => #'user/foo
 foo
@@ -50,6 +51,11 @@ foo
 :?
 :ffviiisthebestgame
 :bar
+
+'foo
+'symbol
+'abcdef
+'a-1-v-$-5
 
 (type :foo)
 ; => clojure.lang.Keyword
@@ -73,11 +79,28 @@ foo
 ; Lists are the classic collection type in Lisp (the name comes from list
 ; processing, after all) languages, and Clojure is no exception. Literal lists are
 ; written with parentheses:
+
+(defn foo [a b & args] (+ a b))
+(foo 1 4) ; => 5
+; foo(1, 4);
+
+[1 2 3 4] ; -> vector
+'(1 2 3 4) ; -> list
+
+; This is a function call:
+(foo 1 2 3 4 5)
+; This is a list:
+'(foo 1 2 3 4 5)
+
+(nth '(1 2 3 4 5) 2)
+; nth - get nth element from the list or vector
+
 '(yankee hotel foxtrot)
+'(1 2 3)
 '(1234)
 ()
 '(:fred ethel)
-'(1 2 (abc) 4 5)
+'(1 2 '(abc) 4 5)
 
 ; Like lists, vectors store a series of values:
 [12 :a :b :c]
@@ -94,7 +117,7 @@ foo
 ; "Collections" are just groups of data
 ; Both lists and vectors are collections:
 (coll? '(1 2 3)) ; => true
-(coll? [1 2 3]) ; => true
+(coll? [0 2 3]) ; => true
 
 ; Use cons to add an item to the beginning of a list or vector.
 (cons 4 [1 2 3]) ; => (4 1 2 3)
@@ -268,7 +291,6 @@ x ; => #object[clojure.lang.Var$Unbound 0x14008db3 "Unbound: #'user/x"]
 ; as a simple list which happens to have a symbol "cons" as its first
 ; element, we can use quoting:
 
-'(cons 1 [2 3])
 ; => (cons 1 [2 3])
 
 (type '(cons 1 [2 3]))
@@ -327,7 +349,6 @@ x ; => #object[clojure.lang.Var$Unbound 0x14008db3 "Unbound: #'user/x"]
 (.. (java.util.Date.) toString (endsWith "2014")) ; => true
 
 ; IX. Namespaces ---------------------------------------------------------------
-; ------------------------------------------------------------------------------
 ; Clojure’s namespaces provide a way to bundle related functions, macros, and
 ; values.
 ; To create a new namespace, you can use the "ns" macro:
@@ -344,12 +365,10 @@ x ; => #object[clojure.lang.Var$Unbound 0x14008db3 "Unbound: #'user/x"]
 (require 'clojure.string)
 
 ; Use "use" to get all functions from the module
-(use 'clojure.set)
 
 ; Using :require in "ns" macro indicates that you want the clojure.set
 ; namespace loaded. You can also use the :as directive to create an additional
 ; alias to clojure.set:
-(ns foo (:require [clojure.set :as s]))
 
 ; To use unqualified Java classes in any given namespace, you should import them
 ; via the :import directive:
@@ -365,6 +384,10 @@ x ; => #object[clojure.lang.Var$Unbound 0x14008db3 "Unbound: #'user/x"]
 
 ; An atom is the simplest. Pass it an initial value
 (def my-atom (atom {}))
+
+(reset! a 2)
+(swap! my-atom assoc :b 1)
+(reset! my-atom (assoc @my-atom :b 1))
 
 ; Update an atom with swap!.
 ; swap! takes a function and calls it with the current value of the atom
@@ -388,3 +411,14 @@ my-atom  ;=> Atom<#...> (Returns the Atom object)
 (inc-counter)
 
 @counter ; => 5
+
+
+; -------------------------
+
+
+(defn fibonacci [n]
+  (if (<= n 1)
+    n
+    (+ (fibonacci (- n 1)) (fibonacci (- n 2)))))
+
+(fibonacci 6)
